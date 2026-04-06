@@ -84,6 +84,7 @@ pip install -r requirements.txt
 
 Bash
 python -m pytest -v
+
 (The test suite spins up an isolated, in-memory database to verify RBAC security, duplicate-user handling, and core creation logic without affecting local data).
 
 **5. Start the server:**
