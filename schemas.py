@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 from datetime import datetime
 from typing import Optional, Dict
 from models import RoleEnum, RecordTypeEnum
@@ -16,8 +16,8 @@ class UserOut(BaseModel):
     role: RoleEnum
     status: str
 
-    class Config:
-        from_attributes = True
+    # THE MODERN V2 WAY:
+    model_config = ConfigDict(from_attributes=True)
 
 
 # ==========================================
@@ -32,11 +32,9 @@ class RecordCreate(BaseModel):
 class RecordOut(RecordCreate):
     id: int
     date: datetime
-    # Notice: We do NOT include 'is_deleted' here. 
-    # That is internal backend logic. The client doesn't need to see it.
 
-    class Config:
-        from_attributes = True
+    # THE MODERN V2 WAY:
+    model_config = ConfigDict(from_attributes=True)
 
 
 # ==========================================
