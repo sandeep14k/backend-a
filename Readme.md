@@ -80,7 +80,13 @@ venv\Scripts\activate
 
 pip install -r requirements.txt
 
-**4. Start the server:**
+**4. Run the automated Pytest suite:**
+
+Bash
+python -m pytest -v
+(The test suite spins up an isolated, in-memory database to verify RBAC security, duplicate-user handling, and core creation logic without affecting local data).
+
+**5. Start the server:**
 
 uvicorn main:app --reload
 The API will be available at http://127.0.0.1:8000
