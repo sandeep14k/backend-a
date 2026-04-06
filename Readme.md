@@ -27,7 +27,8 @@ finance_backend/
 │   └── dashboard.py  # Advanced data aggregation logic
 ├── main.py           # FastAPI application entry point
 ├── requirements.txt  # Python dependencies
-└── README.md         # Project documentation ```
+└── README.md         # Project documentation
+```
 
 ## 🚀 How to Run Locally
 
