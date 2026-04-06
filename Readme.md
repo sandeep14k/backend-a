@@ -34,9 +34,10 @@ finance_backend/
 
 **1. Clone the repository and navigate to the project folder:**
 ```bash
-git clone <your-repo-link>
+git clone https://github.com/sandeep14k/backend-a.git
 cd finance_backend
 ```
+**2. Create and activate a virtual environment:**
 # On macOS/Linux
 python3 -m venv venv
 source venv/bin/activate
@@ -45,9 +46,11 @@ source venv/bin/activate
 python -m venv venv
 venv\Scripts\activate
 
+**3. Install dependencies:**
+
 pip install -r requirements.txt
 
-# Start the server:
-Bash
+**4. Start the server:**
+
 uvicorn main:app --reload
 The API will be available at http://127.0.0.1:8000
