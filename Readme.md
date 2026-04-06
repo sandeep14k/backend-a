@@ -1,44 +1,70 @@
-# Live at - 
-https://backend-a-delta.vercel.app
+# 📊 Finance Dashboard API (Enterprise-Grade Backend)
 
-https://backend-a-delta.vercel.app/docs
-# Finance Dashboard API
+A highly scalable, production-ready REST API built with **FastAPI** and **SQLAlchemy** for managing financial records, user roles, and analytical dashboard data.
 
-An enterprise-grade backend API built with **FastAPI** and **SQLAlchemy** for managing financial records, user roles, and analytical dashboard data.
+🌍 **Live Base URL:** [https://backend-a-delta.vercel.app](https://backend-a-delta.vercel.app)  
+📖 **Interactive API Docs (Swagger UI):** [https://backend-a-delta.vercel.app/docs](https://backend-a-delta.vercel.app/docs)  
 
-## 🏗️ Architecture & Trade-offs
+---
 
-This project was designed with maintainability, separation of concerns, and data safety in mind. While built as an assignment, it follows production-ready patterns:
+## 🏗️ Architecture & Engineering Trade-offs
 
-1. **Domain-Driven Routing:** Routes are split using `APIRouter` (`routers/users.py`, `routers/records.py`, etc.) rather than bloating a single `main.py` file.
-2. **Soft Deletes:** Financial records are *never* hard-deleted. Instead, an `is_deleted` flag is flipped in the database. This ensures data integrity and auditability, a standard practice in financial systems.
-3. **Advanced SQL Aggregation:** The dashboard summary uses SQLAlchemy's `func.sum` and `group_by` to calculate category-wise totals at the database layer, preventing memory bloat in the Python runtime.
-4. **Pagination & Limits:** List endpoints enforce pagination (`skip` and `limit`) with logical boundaries to prevent database crashing or data scraping.
-5. **Mock Authentication (Header-based):** To fulfill the assignment's "mock auth" allowance seamlessly, authentication is handled via a custom `user-id` Header Dependency. This cleanly demonstrates Role-Based Access Control (RBAC) and modular FastAPI dependencies without the overhead of setting up a JWT infrastructure for local review.
-6. **SQLite Storage:** Chosen to provide a frictionless local evaluation experience without requiring the reviewer to spin up Docker containers or local PostgreSQL databases.
+This project was intentionally designed to showcase maintainability, separation of concerns, and data safety. While built as an assignment, it strictly adheres to enterprise-ready patterns:
 
-## 📂 Project Structure
+* **Domain-Driven Routing:** Routes are logically isolated using FastAPI's `APIRouter` (`routers/users.py`, `routers/records.py`, etc.) ensuring the codebase remains clean as it scales.
+* **Modern Data Validation:** Fully migrated to **Pydantic V2** (`ConfigDict`) for lightning-fast schema validation and serialization.
+* **Data Integrity (Soft Deletes):** Financial records are *never* hard-deleted. An `is_deleted` flag is flipped at the database level. This guarantees auditability, which is a mandatory standard in financial systems.
+* **Database-Layer Aggregation:** The dashboard summary relies on SQLAlchemy's `func.sum` and `group_by` to calculate category-wise totals directly inside the database engine, eliminating memory bloat in the Python runtime.
+* **Pagination & Rate Protection:** List endpoints enforce pagination boundaries (`skip` and `limit`) to prevent database crashing or malicious data scraping.
+* **Serverless Deployment:** Successfully deployed to Vercel utilizing Serverless Functions for high availability and zero-maintenance scaling.
 
-```text
-finance_backend/
-├── database.py       # DB connection and session management
-├── models.py         # SQLAlchemy database models (with soft deletes)
-├── schemas.py        # Pydantic validation models
-├── auth.py           # Authentication and RBAC dependencies
-├── routers/          # API Routers for separation of concerns
-│   ├── users.py      # User creation and listing
-│   ├── records.py    # Financial records with pagination & filtering
-│   └── dashboard.py  # Advanced data aggregation logic
-├── main.py           # FastAPI application entry point
-├── requirements.txt  # Python dependencies
-└── README.md         # Project documentation
-```
+## 🛠️ Tech Stack
 
-## 🚀 How to Run Locally
+* **Framework:** FastAPI (Python)
+* **ORM:** SQLAlchemy
+* **Database:** SQLite (Chosen for frictionless evaluation and portability)
+* **Validation:** Pydantic V2
+* **Testing:** Pytest & HTTPX (100% passing automated test suite)
+* **Deployment:** Vercel
 
-**1. Clone the repository and navigate to the project folder:**
+---
+
+## 🔐 Role-Based Access Control (RBAC)
+
+The system enforces strict RBAC via custom FastAPI dependency injection headers (`user-id`). 
+
+| Role | Capabilities |
+| :--- | :--- |
+| **Viewer** | Cannot interact with records or dashboard summaries. (Base level logic). |
+| **Analyst** | Can read paginated records and access the dashboard aggregation endpoint. Cannot mutate data. |
+| **Admin** | Full access. Can create users, create records, soft-delete records, and view summaries. |
+
+---
+
+## 🧪 How to Test the Live API
+
+You do not need to download any code to test this API. You can evaluate the entire system directly through the browser.
+
+1. Navigate to the Live Swagger UI: [https://backend-a-delta.vercel.app/docs](https://backend-a-delta.vercel.app/docs)
+2. **Bootstrap the System (Create an Admin):**
+   * Open the `POST /users/` endpoint.
+   * Click **"Try it out"** and create a user with the role `"admin"`. 
+   * Note the `id` returned in the JSON response.
+3. **Execute Authenticated Routes:**
+   * Open any protected endpoint (e.g., `POST /records/` or `GET /dashboard/summary`).
+   * Click **"Try it out"**.
+   * You will see a required header field: `user-id`. 
+   * Enter your Admin ID to securely authorize the request and bypass the RBAC guard!
+
+---
+
+## 💻 Local Development Setup
+
+If you wish to clone the repository, review the architecture, and run the automated test suite locally, follow these steps:
+
+**1. Clone the repository:**
 ```bash
-git clone https://github.com/sandeep14k/backend-a.git
+git clone https://github.com/sandeep14k/backend-a
 cd finance_backend
 ```
 **2. Create and activate a virtual environment:**
